@@ -1,0 +1,10 @@
+﻿using MvcInstaller.Settings;
+using System.Configuration;
+
+namespace MvcInstaller
+{
+    public interface IConnectionStringFactory
+    {
+        void Execute(InstallerConfig config, Configuration configSection);
+    }
+}

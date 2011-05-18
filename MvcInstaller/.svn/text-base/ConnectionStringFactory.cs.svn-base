@@ -1,0 +1,46 @@
+﻿using MvcInstaller.Settings;
+using System;
+using System.Configuration;
+
+namespace MvcInstaller
+{
+    public class ConnectionStringFactory : IConnectionStringFactory
+    {
+        #region ctors
+        private IConnectionStringComponent component;
+
+        public ConnectionStringFactory(IConnectionStringComponent component)
+        {
+            this.component = component;
+        } 
+        #endregion
+
+        #region IConnectionStringFactory Members
+
+        public void Execute(InstallerConfig config, Configuration configSection)
+        {
+            string connString = component.GetConnString();
+            string providerName = "System.Data.SqlClient";
+            if (!string.IsNullOrEmpty(config.Database.EntityFrameworkEntitiesName))
+            {
+                providerName = "System.Data.EntityClient";
+                connString = component.BuildEntityFrameworkConnectionString();
+            }
+
+            ConnectionStringsSection connectionStringsSection = configSection.ConnectionStrings;
+            ConnectionStringSettings appTemplate = new ConnectionStringSettings(config.Database.ConnectionStringName, connString, providerName);
+            connectionStringsSection.ConnectionStrings.Clear();
+            connectionStringsSection.ConnectionStrings.Add(appTemplate);
+
+            if (!string.IsNullOrEmpty(config.Database.EntityFrameworkEntitiesName))
+            {
+                ConnectionStringSettings connTemplate = new ConnectionStringSettings("MembershipConnection", component.GetConnString(), "System.Data.SqlClient");
+                connectionStringsSection.ConnectionStrings.Add(connTemplate);
+            }
+        }
+
+        #endregion
+
+
+    }
+}

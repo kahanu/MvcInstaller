@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://mvcinstaller.codeplex.com/license</licenseUrl>
+    <projectUrl>http://mvcinstaller.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <tags>mvc installer</tags>
+  </metadata>
+  <files>
+    <file src="bin\Release\MvcInstaller.MVC2.dll" target="lib" />
+    <file src="MvcInstaller\ajax-loader.gif" target="Content" />
+    <file src="Views\Install\Index.aspx" target="Views\Install" />
+    <file src="web.config.transform" target="Content" />
+  </files>
+</package>

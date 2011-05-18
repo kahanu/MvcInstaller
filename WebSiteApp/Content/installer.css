@@ -1,0 +1,9 @@
+﻿
+.installer-label
+{
+    float: left; width: 180px; font-weight: bold;
+}
+
+
+.fieldwrapper { margin-bottom: 0.5em; clear: both; }
+.fieldwrapperindented { margin-bottom: 0.5em; clear: both; margin-left: 20px; }

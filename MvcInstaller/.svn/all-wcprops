@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 19
+/svn/!svn/ver/55502
+END
+MvcInstaller.csproj.user
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/56382/MvcInstaller.csproj.user
+END
+ConnectionStringFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/56383/ConnectionStringFactory.cs
+END
+IConnectionStringComponent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/56383/IConnectionStringComponent.cs
+END
+Web.config.transform
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/60049/Web.config.transform
+END
+IConnectionStringFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/56383/IConnectionStringFactory.cs
+END
+InstallWizard.cs
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/56417/InstallWizard.cs
+END
+MvcInstaller.1.0.128.nupkg
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/60049/MvcInstaller.1.0.128.nupkg
+END
+JsonResponse.cs
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/55506/JsonResponse.cs
+END
+XmlSerializer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/55506/XmlSerializer.cs
+END
+MvcInstaller.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/60049/MvcInstaller.csproj
+END
+ConfigurationFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/56417/ConfigurationFactory.cs
+END
+MvcInstallerV2.nuspec
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/60049/MvcInstallerV2.nuspec
+END
+IConfigurationFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/56417/IConfigurationFactory.cs
+END
+ConnectionStringComponent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/56383/ConnectionStringComponent.cs
+END
+InstallController.cs
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/55571/InstallController.cs
+END
