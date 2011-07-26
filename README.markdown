@@ -4,6 +4,7 @@ http://mvcinstaller.codeplex.com
 Created on: 11/21/2010
 Version: 1.0.127
 
+Updated on July 26, 2011
 
 A small, easy to use ASP.NET MVC 2 application installer.  This pluggable application easily installs your database tables, views, etc, and creates your Roles and Users for your Membership system.
 
@@ -26,12 +27,17 @@ By using this simple installer.config file, it allows you to easy set initial Me
 Also, once the installer has finished successfully, it will remove the "AppInstalled" key in your appSettings section of the web.config file.  This will prevent others from trying to manually navigate to the installer after your application is up and running.
 
 
+REQUIREMENTS
+
+You MUST create the database PRIOR to running MvcInstaller.  You should be able to do this with your web host through their control panel.  MvcInstaller does NOT create the database, it simply runs the sql scripts for your schema and any seed data, but it does not create the database.
+
+
 INSTALLATION INSTRUCTIONS
 
 It takes only a minute or so to install this.  It becomes faster the more you do it.
 
 1)  Make a reference to the MvcInstaller.dll file into your MVC application
-2)  Copy the Index.aspx file into a /Views/Install folder.  You may need to modify the MasterPage directive. This also assumes that the Master page has a "HeadContent" placeholder in the head element.
+2)  Copy the Index.aspx file into a /Views/Install folder.  You may need to modify the MasterPage directive. 
 3)  Copy the installer.config file into the root of your application.
 4)  In your web.config, modify the appSettings section to include the following:
 	<add key="AppInstalled" value="false" />
