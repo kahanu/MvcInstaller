@@ -1,11 +1,11 @@
-﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<MvcInstaller.Settings.InstallerConfig>" %>
+<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<MvcInstaller.Settings.InstallerConfig>" %>
 
 <!DOCTYPE html>
 <html>
 <head id="Head1" runat="server">
     <title>MvcInstaller - Install</title>
     <link href="<%: Url.Content("~/MvcInstaller/Site.css") %>" rel="stylesheet" type="text/css" />
-    <script src="<%: Url.Content("~/MvcInstaller/jquery-1.4.4.min.js") %>" type="text/javascript"></script>
+    <script src="<%: Url.Content("~/MvcInstaller/jquery-1.6.1.min.js") %>" type="text/javascript"></script>
 <style type="text/css">
 .installer-label
 {
@@ -14,6 +14,7 @@
 
 .fieldwrapper { margin-bottom: 0.5em; clear: both; }
 .fieldwrapperindented { margin-bottom: 0.5em; clear: both; margin-left: 20px; }
+.error { color: Red; }
 </style>
 </head>
 
@@ -26,8 +27,19 @@
             </div>
               
             <div id="logindisplay">
-                <% Html.RenderPartial("LogOnUserControl"); %>
-            </div> 
+<%
+    if (Request.IsAuthenticated) {
+%>
+        Welcome <b><%: Page.User.Identity.Name %></b>!
+        [ <%: Html.ActionLink("Log Off", "LogOff", "Account") %> ]
+<%
+    }
+    else {
+%> 
+        [ <%: Html.ActionLink("Log On", "LogOn", "Account") %> ]
+<%
+    }
+%>            </div> 
             
             <div id="menucontainer">
             
@@ -145,12 +157,14 @@
             function OnSuccess(data) {
                 loader.hide();
                 var msg = data.Message;
-                if (msg == "The installer completed successfully!") {
+                if (data.Success) {
                     msg += " <a href=\"/Account/LogOn\">Log On</a>";
+                    resp.removeClass("error").addClass("success");
                 } else {
                     button.show();
+                    resp.addClass("error");
                 }
-                resp.html(msg);
+                resp.html(msg)
             }
 
             function OnError(data) {
