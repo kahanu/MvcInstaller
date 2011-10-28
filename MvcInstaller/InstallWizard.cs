@@ -18,14 +18,14 @@
 // ANY  THEORY  OF  LIABILITY,  WHETHER  IN  CONTRACT,  STRICT  LIABILITY,  OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE)  ARISING  IN  ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-using MvcInstaller.Settings;
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.IO;
+using System.Text;
 using System.Web.Configuration;
 using System.Web.Security;
-using System.Xml.Linq;
+using MvcInstaller.Settings;
 
 namespace MvcInstaller
 {
@@ -64,6 +64,7 @@ namespace MvcInstaller
             }
             catch (Exception)
             {
+                
                 throw;
             }
         }
@@ -115,6 +116,29 @@ namespace MvcInstaller
                 if (!Roles.Enabled)
                     throw new ApplicationException("The RoleManager was not Enabled. It has been updated! Click &quot;Install&quot; to continue.");
 
+                // Added: 5/19/2011 By King Wilder
+                // Needed a way to validate rules based on the Membership section
+                // in the web.config, such as minRequiredPasswordLength.  This
+                // factory class will create rules based on these requirements and
+                // validate the InstallerConfig values then display the error
+                // messages back to the browser.
+                System.Configuration.Configuration configSection = WebConfigurationManager.OpenWebConfiguration("~");
+                IRulesValidationFactory rulesFactory = new RulesValidationFactory(config, configSection);
+                if (!rulesFactory.Validate())
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("<p><b>There are some items that need your attention:</b></p>");
+                    sb.Append("<ul>");
+                    foreach (string error in rulesFactory.ValidationErrors)
+                    {
+                        sb.AppendFormat("<li>{0}</li>", error);
+                    }
+                    sb.Append("</ul>");
+                    sb.Append("<p>Please fix these issues in the installer.config file and then come back and click the &quot;Install&quot; button.</p>");
+
+                    throw new ApplicationException(sb.ToString());
+                }
+
                 // Add the ASPNETDB tables to the database using the SqlServices Install method.
                 // This will add the ASPNETDB tables to the same database as the application.
                 // NOTE: This method can ONLY be used for SQL Server.  To point to MySql, 
@@ -144,10 +168,21 @@ namespace MvcInstaller
                         MembershipCreateStatus status = MembershipCreateStatus.UserRejected;
                         MembershipUser u = System.Web.Security.Membership.CreateUser(user.UserName.Trim(), user.Password.Trim(), user.Email.Trim(),
                             user.SecretQuestion.Trim(), user.SecretAnswer.Trim(), true, out status);
-
+                        
                         if (status == MembershipCreateStatus.Success)
                         {
+                            // Add user to role
                             Roles.AddUserToRole(user.UserName, role.Name);
+                        }
+                        else if (status == MembershipCreateStatus.DuplicateUserName)
+                        {
+                            // Add a duplicate username to another role.
+                            // This allows the same user to be added to any number of roles.
+                            Roles.AddUserToRole(user.UserName, role.Name);
+                        }
+                        else if (status == MembershipCreateStatus.InvalidPassword)
+                        {
+                            throw new ApplicationException("Please update the install.config file.  The passwords don't adhere to the rules in the web.config/membership section.");
                         }
                     }
                 }
@@ -225,8 +260,10 @@ namespace MvcInstaller
             // You can uncomment this if you want to add a LocalSqlServer connection.
             // I am connecting to the ASPNETDB tables with the same connection string since they are both in the same database.
             // If you create a separate ASPNETDB database, then you can uncomment the following and set the connection string manually.
-            //ConnectionStringSettings LocalSqlServer = new ConnectionStringSettings("LocalSqlServer", GetConnString(config), "System.Data.SqlClient");
-            //connectionStringsSection.ConnectionStrings.Add(LocalSqlServer);
+            //ConnectionStringSettings LocalSqlServer = new ConnectionStringSettings("LocalSqlServer", component.GetConnString(), "System.Data.SqlClient");
+            //ConnectionStringsSection connSection = configSection.ConnectionStrings;
+            //connSection.ConnectionStrings.Add(LocalSqlServer);
+
             configSection.Save();
         }
 
@@ -246,6 +283,19 @@ namespace MvcInstaller
             configSection.Save();
         }
 
+        /// <summary>
+        /// In case of an exception after creating and partially populating the Membership database,
+        /// we can rollback the action.  But first we need to delete all rows from all tables.
+        /// </summary>
+        /// <param name="config"></param>
+        private static void Rollback(InstallerConfig config)
+        {
+            // aspnet_Applications, Membership, Roles, SchemaVersions, Users, UsersInRoles
+
+            //TODO
+
+            System.Web.Management.SqlServices.Uninstall(config.Database.DataSource.Trim(), config.Database.UserName.Trim(), config.Database.Password.Trim(), config.Database.InitialCatalog.Trim(), System.Web.Management.SqlFeatures.All);
+        }
         #endregion
     }
 }

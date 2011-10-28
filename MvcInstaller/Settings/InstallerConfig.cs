@@ -76,9 +76,6 @@ namespace MvcInstaller.Settings
 
         }
 
-        //[XmlAttribute()]
-        //public bool Create;
-
         [XmlAttribute()]
         public string ProviderName;
 
@@ -88,6 +85,9 @@ namespace MvcInstaller.Settings
         {
             get { return _roleList; }
         }
+
+        [XmlAttribute()]
+        public string type;
     }
 
     [Serializable]
@@ -98,11 +98,11 @@ namespace MvcInstaller.Settings
 
         }
 
-        //[XmlAttribute()]
-        //public bool Create;
-
         [XmlAttribute()]
         public string ProviderName;
+
+        [XmlAttribute()]
+        public string type;
     }
 
     [Serializable]
@@ -118,6 +118,9 @@ namespace MvcInstaller.Settings
 
         [XmlAttribute()]
         public string ProviderName;
+
+        [XmlAttribute()]
+        public string type;
     }
 
     [Serializable]

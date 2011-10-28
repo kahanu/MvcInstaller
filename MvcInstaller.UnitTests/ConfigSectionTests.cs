@@ -24,5 +24,14 @@ namespace MvcInstaller.UnitTests
 
             configSection.Save();
         }
+
+        [Test]
+        public void check_membership_types()
+        {
+            InstallerConfig config = Serializer<InstallerConfig>.Deserialize(AppDomain.CurrentDomain.BaseDirectory + @"\installer.config");
+
+            Console.WriteLine(string.IsNullOrEmpty(config.Membership.type) ? "System.Web.Security.SqlMembershipProvider1" : config.Membership.type);
+        }
+
     }
 }

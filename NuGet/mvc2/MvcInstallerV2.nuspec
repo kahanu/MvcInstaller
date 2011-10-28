@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>MvcInstaller.MVC2</id>
-    <version>1.0.131.9</version>
+    <version>1.0.138.23</version>
     <authors>Gizmo Beach</authors>
     <owners>Gizmo Beach</owners>
     <licenseUrl>http://mvcinstaller.codeplex.com/license</licenseUrl>
     <projectUrl>http://mvcinstaller.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>ASP.NET MVC Installer - the easy way to install your database-driven ASP.NET MVC 2 application on your production server.</description>
+    <description>ASP.NET MVC Installer - install your database schema and the ASP.NET Membership system on your server via a browser.</description>
     <tags>mvc installer</tags>
   </metadata>
 </package>

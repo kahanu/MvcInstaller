@@ -29,7 +29,7 @@ namespace MvcInstaller
         {
             UpdateConnectionString(config, configSection);
 
-            UpdateMembershipConnectionStrings(configSection, config);
+            UpdateMembershipProviders(configSection, config);
         }
 
 
@@ -72,7 +72,7 @@ namespace MvcInstaller
         /// </summary>
         /// <param name="configSection"></param>
         /// <param name="config"></param>
-        private void UpdateMembershipConnectionStrings(Configuration configSection, InstallerConfig config)
+        private void UpdateMembershipProviders(Configuration configSection, InstallerConfig config)
         {
             if (config.Membership.Create)
             {
@@ -87,36 +87,84 @@ namespace MvcInstaller
                 }
 
                 // Update the membership section.
+                bool isCustomMembershipProvider = (config.Membership.ProviderName == "AspNetSqlMembershipProvider") ? false : true;
                 membership.DefaultProvider = config.Membership.ProviderName;
+
                 for (int i = 0; i < membership.Providers.Count; i++)
                 {
-                    membership.Providers[i].Parameters["connectionStringName"] = connString;
-                    membership.Providers[i].Parameters["name"] = config.Membership.ProviderName;
-                    membership.Providers[i].Parameters["applicationName"] = config.ApplicationName;
+                    if (membership.Providers[i].Name == "AspNetSqlMembershipProvider")
+                    {
+                        membership.Providers[i].Parameters["connectionStringName"] = connString;
+                        membership.Providers[i].Parameters["name"] = "AspNetSqlMembershipProvider";
+                        membership.Providers[i].Parameters["type"] = "System.Web.Security.SqlMembershipProvider";
+                        membership.Providers[i].Parameters["applicationName"] = config.ApplicationName;
+                    }
                 }
+
+                if (isCustomMembershipProvider)
+                {
+                    // Create a new provider.
+                    ProviderSettings p = new ProviderSettings();
+                    p.Parameters["connectionStringName"] = connString;
+                    p.Parameters["name"] = config.Membership.ProviderName;
+                    p.Parameters["type"] = config.Membership.type;
+                    p.Parameters["applicationName"] = config.ApplicationName;
+                    membership.Providers.Add(p);
+                }
+
 
                 // Update the profile section.
+                bool isCustomProfileProvider = (config.Profile.ProviderName == "AspNetSqlProfileProvider") ? false : true;
+                profile.DefaultProvider = config.Profile.ProviderName;
                 for (int i = 0; i < profile.Providers.Count; i++)
                 {
-                    profile.Providers[i].Parameters["connectionStringName"] = connString;
-                    profile.Providers[i].Parameters["name"] = config.Profile.ProviderName;
-                    profile.Providers[i].Parameters["applicationName"] = config.ApplicationName;
+                    if (profile.Providers[i].Name == "AspNetSqlProfileProvider")
+                    {
+                        profile.Providers[i].Parameters["connectionStringName"] = connString;
+                        profile.Providers[i].Parameters["name"] = "AspNetSqlProfileProvider";
+                        profile.Providers[i].Parameters["type"] = "System.Web.Profile.SqlProfileProvider";
+                        profile.Providers[i].Parameters["applicationName"] = config.ApplicationName;
+                    }
                 }
 
+                if (isCustomProfileProvider)
+                {
+                    ProviderSettings p = new ProviderSettings();
+                    p.Parameters["connectionStringName"] = connString;
+                    p.Parameters["name"] = config.Profile.ProviderName;
+                    p.Parameters["type"] = config.Profile.type;
+                    p.Parameters["applicationName"] = config.ApplicationName;
+                    profile.Providers.Add(p);
+                }
+
+
                 // Update the roleManager section.
+                bool isCustomRoleProvider = (config.RoleManager.ProviderName == "AspNetSqlRoleProvider") ? false : true;
+                roleManager.DefaultProvider = config.RoleManager.ProviderName;
                 for (int i = 0; i < roleManager.Providers.Count; i++)
                 {
-                    if (roleManager.Providers[i].Type == "System.Web.Security.SqlRoleProvider")
+                    if (roleManager.Providers[i].Name == "AspNetSqlRoleProvider")
                     {
                         roleManager.Providers[i].Parameters["connectionStringName"] = connString;
-                        roleManager.Providers[i].Parameters["name"] = config.RoleManager.ProviderName;
+                        roleManager.Providers[i].Parameters["name"] = "AspNetSqlRoleProvider";
+                        roleManager.Providers[i].Parameters["type"] = "System.Web.Security.SqlRoleProvider";
+                        roleManager.Providers[i].Parameters["applicationName"] = config.ApplicationName;
                     }
-                    roleManager.Providers[i].Parameters["applicationName"] = config.ApplicationName;
+                }
+
+                if (isCustomRoleProvider)
+                {
+                    ProviderSettings p = new ProviderSettings();
+                    p.Parameters["connectionStringName"] = connString;
+                    p.Parameters["name"] = config.RoleManager.ProviderName;
+                    p.Parameters["type"] = config.RoleManager.type;
+                    p.Parameters["applicationName"] = config.ApplicationName;
+                    roleManager.Providers.Add(p);
                 }
 
                 roleManager.Enabled = true;
             }
-        } 
+        }
 
         #endregion
 

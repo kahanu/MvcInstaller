@@ -53,9 +53,18 @@
     <Compile Include="IConnectionStringComponent.cs" />
     <Compile Include="IConfigurationFactory.cs" />
     <Compile Include="InstallController.cs" />
+    <Compile Include="InstallerRulesValidator.cs" />
     <Compile Include="InstallWizard.cs" />
+    <Compile Include="IRulesValidationFactory.cs" />
     <Compile Include="JsonResponse.cs" />
+    <Compile Include="MinRequiredNonAlphanumericCharacters.cs" />
+    <Compile Include="MinRequiredPasswordLength.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyRule.cs" />
+    <Compile Include="RequiresApplicationName.cs" />
+    <Compile Include="RequiresQuestionAndAnswer.cs" />
+    <Compile Include="RequireUniqueEmail.cs" />
+    <Compile Include="RulesValidationFactory.cs" />
     <Compile Include="Settings\InstallerConfig.cs" />
     <Compile Include="XmlSerializer.cs" />
   </ItemGroup>
