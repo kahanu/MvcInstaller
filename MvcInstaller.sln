@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcInstallerV3.UnitTests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcApplication4", "MvcApplication4\MvcApplication4.csproj", "{E66DB55B-6A5C-4F76-A2A8-359871EFF85B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcApplication5", "MvcApplication5\MvcApplication5.csproj", "{E82E7EEE-DC41-430A-AAA2-5F86742407B3}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = MvcInstaller.vsmdi
@@ -65,6 +67,10 @@ Global
 		{E66DB55B-6A5C-4F76-A2A8-359871EFF85B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E66DB55B-6A5C-4F76-A2A8-359871EFF85B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E66DB55B-6A5C-4F76-A2A8-359871EFF85B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82E7EEE-DC41-430A-AAA2-5F86742407B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82E7EEE-DC41-430A-AAA2-5F86742407B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82E7EEE-DC41-430A-AAA2-5F86742407B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82E7EEE-DC41-430A-AAA2-5F86742407B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
