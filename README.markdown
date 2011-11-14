@@ -1,12 +1,14 @@
 Mvc Installer
 by King Wilder
-http://mvcinstaller.codeplex.com
+https://github.com/kahanu/MvcInstaller
 Created on: 11/21/2010
-Version: 1.0.127
 
-Updated on July 26, 2011
+
+Updated on November 14, 2011
 
 A small, easy to use ASP.NET MVC 2 application installer.  This pluggable application easily installs your database tables, views, etc, and creates your Roles and Users for your Membership system.
+
+This is primarily targeted toward site administrators to quickly and easily install their ASP.NET MVC application on their staging or production server with little effort.
 
 RESTRICTIONS
 
@@ -31,19 +33,6 @@ REQUIREMENTS
 
 You MUST create the database PRIOR to running MvcInstaller.  You should be able to do this with your web host through their control panel.  MvcInstaller does NOT create the database, it simply runs the sql scripts for your schema and any seed data, but it does not create the database.
 
-
-INSTALLATION INSTRUCTIONS
-
-It takes only a minute or so to install this.  It becomes faster the more you do it.
-
-1)  Make a reference to the MvcInstaller.dll file into your MVC application
-2)  Copy the Index.aspx file into a /Views/Install folder.  You may need to modify the MasterPage directive. 
-3)  Copy the installer.config file into the root of your application.
-4)  In your web.config, modify the appSettings section to include the following:
-	<add key="AppInstalled" value="false" />
-	This tells the application that it's ok to display the Install view.
-5)  Copy your SQL scripts into the /App_Data folder, or anywhere else of your choice.
-6)  Modify the installer.config file with the information for your application.	
 
 
 MODIFY YOUR INSTALLER.CONFIG FILE
@@ -82,6 +71,8 @@ RUN THE INSTALLER
 To run the installer, simply launch your application and in the address bar of your browser, navigate to the "Install" path.  Such as: http://www.mynewdomain.com/install
 
 You will be shown the Mvc Installer page that displays all the information you've entered into your installer.config file.  You can check it to make sure it's correct.  When you confirm that everything is correct, then click the "Install" button.
+
+New as of November, 1, 2011 - a checkbox now appears next to the "Install" button that will tell MvcInstaller whether you have already installed "SecurityGuard" and will be logging on using "SecurityGuard".  If so, check the box and it will simply change the resulting "LogOn" link to point to the "/SGAccount/LogOn" controller and action instead of the default "/Account/Login" path.
 
 It will initiate an Ajax call to the InstallController and the Run action to install your database and membership system.
 
