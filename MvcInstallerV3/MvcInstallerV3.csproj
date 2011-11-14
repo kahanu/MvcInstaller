@@ -34,6 +34,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -50,13 +51,15 @@
   <ItemGroup>
     <Compile Include="ConnectionStringComponent.cs" />
     <Compile Include="ConfigurationFactory.cs" />
+    <Compile Include="FileWriter.cs" />
     <Compile Include="IConnectionStringComponent.cs" />
     <Compile Include="IConfigurationFactory.cs" />
     <Compile Include="InstallController.cs" />
-    <Compile Include="InstallerRulesValidator.cs" />
     <Compile Include="InstallWizard.cs" />
+    <Compile Include="IProviderName.cs" />
     <Compile Include="IRulesValidationFactory.cs" />
     <Compile Include="JsonResponse.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="MinRequiredNonAlphanumericCharacters.cs" />
     <Compile Include="MinRequiredPasswordLength.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -75,6 +75,7 @@ namespace MvcInstaller
             {
                 json.Success = false;
                 json.Message = ex.Message;
+                Log.Exception(ex);
             }
 
             return Json(json);

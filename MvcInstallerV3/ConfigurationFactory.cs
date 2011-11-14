@@ -47,10 +47,12 @@ namespace MvcInstaller
         private void UpdateConnectionString(InstallerConfig config, Configuration configSection)
         {
             string connString = component.GetConnString();
-            string providerName = "System.Data.SqlClient";
+            //string providerName = "System.Data.SqlClient";
+            string providerName = component.GetProviderName;
+
             if (!string.IsNullOrEmpty(config.Database.EntityFrameworkEntitiesName))
             {
-                providerName = "System.Data.EntityClient";
+                //providerName = "System.Data.EntityClient";
                 connString = component.BuildEntityFrameworkConnectionString();
             }
 
@@ -103,13 +105,26 @@ namespace MvcInstaller
 
                 if (isCustomMembershipProvider)
                 {
-                    // Create a new provider.
-                    ProviderSettings p = new ProviderSettings();
-                    p.Parameters["connectionStringName"] = connString;
-                    p.Parameters["name"] = config.Membership.ProviderName;
-                    p.Parameters["type"] = config.Membership.type;
-                    p.Parameters["applicationName"] = config.ApplicationName;
-                    membership.Providers.Add(p);
+                    bool exists = false;
+                    for (int i = 0; i < membership.Providers.Count; i++)
+                    {
+                        if (membership.Providers[i].Name == config.Membership.ProviderName)
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists)
+                    {
+                        // Create a new provider.
+                        ProviderSettings p = new ProviderSettings();
+                        p.Parameters["connectionStringName"] = connString;
+                        p.Parameters["name"] = config.Membership.ProviderName;
+                        p.Parameters["type"] = config.Membership.type;
+                        p.Parameters["applicationName"] = config.ApplicationName;
+                        membership.Providers.Add(p);
+                    }
                 }
 
 
@@ -129,12 +144,25 @@ namespace MvcInstaller
 
                 if (isCustomProfileProvider)
                 {
-                    ProviderSettings p = new ProviderSettings();
-                    p.Parameters["connectionStringName"] = connString;
-                    p.Parameters["name"] = config.Profile.ProviderName;
-                    p.Parameters["type"] = config.Profile.type;
-                    p.Parameters["applicationName"] = config.ApplicationName;
-                    profile.Providers.Add(p);
+                    bool exists = false;
+                    for (int i = 0; i < profile.Providers.Count; i++)
+                    {
+                        if (profile.Providers[i].Name == config.Profile.ProviderName)
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists)
+                    {
+                        ProviderSettings p = new ProviderSettings();
+                        p.Parameters["connectionStringName"] = connString;
+                        p.Parameters["name"] = config.Profile.ProviderName;
+                        p.Parameters["type"] = config.Profile.type;
+                        p.Parameters["applicationName"] = config.ApplicationName;
+                        profile.Providers.Add(p);
+                    }
                 }
 
 
@@ -154,12 +182,25 @@ namespace MvcInstaller
 
                 if (isCustomRoleProvider)
                 {
-                    ProviderSettings p = new ProviderSettings();
-                    p.Parameters["connectionStringName"] = connString;
-                    p.Parameters["name"] = config.RoleManager.ProviderName;
-                    p.Parameters["type"] = config.RoleManager.type;
-                    p.Parameters["applicationName"] = config.ApplicationName;
-                    roleManager.Providers.Add(p);
+                    bool exists = false;
+                    for (int i = 0; i < roleManager.Providers.Count; i++)
+                    {
+                        if (roleManager.Providers[i].Name == config.RoleManager.ProviderName)
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists)
+                    {
+                        ProviderSettings p = new ProviderSettings();
+                        p.Parameters["connectionStringName"] = connString;
+                        p.Parameters["name"] = config.RoleManager.ProviderName;
+                        p.Parameters["type"] = config.RoleManager.type;
+                        p.Parameters["applicationName"] = config.ApplicationName;
+                        roleManager.Providers.Add(p);
+                    }
                 }
 
                 roleManager.Enabled = true;
