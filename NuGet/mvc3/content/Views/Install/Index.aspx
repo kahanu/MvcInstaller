@@ -28,19 +28,8 @@
             </div>
               
             <div id="logindisplay">
-<%
-    if (Request.IsAuthenticated) {
-%>
-        Welcome <b><%: Page.User.Identity.Name %></b>!
-        [ <%: Html.ActionLink("Log Off", "LogOff", "Account") %> ]
-<%
-    }
-    else {
-%> 
-        [ <%: Html.ActionLink("Log On", "LogOn", "Account") %> ]
-<%
-    }
-%>            </div> 
+                &nbsp;      
+            </div> 
             
             <div id="menucontainer">
             
@@ -129,7 +118,11 @@
         <%} %>
     </fieldset>
     <div id="response"></div>
-    <button id="runprocess">Install</button>
+    <button id="runprocess">Install</button> 
+    <span id="useSecurityGuardSpan">
+        <input type="checkbox" id="useSecurityGuard" name="useSecurityGuard" value="true" /> Use <a href="http://www.mvccentral.net/s/43" target="_blank" title="Click here to read an article on SecurityGuard.">SecurityGuard</a> 
+        (<span id="qmark" title="Indicates whether to display the LogOn link to point to the SecurityGuard LogOn page. Not to install SecurityGuard." style="cursor: pointer; color: Blue;">?</span>)
+    </span>
     <span id="loader" style="display: none;">
         <img src="/MvcInstaller/ajax-loader.gif" alt="Processing... please wait!" />&nbsp;Processing... please wait!
     </span>
@@ -140,10 +133,14 @@
             var loader = $("#loader");
             var button = $("#runprocess");
             var resp = $("#response");
+            var SGSpan = $("#useSecurityGuardSpan");
+            var SGIsChecked = false;
 
             $("#runprocess").live("click", function () {
                 button.hide();
+                SGSpan.hide();
                 loader.show();
+                SGIsChecked = $(":checkbox").is(":checked");
 
                 $.ajax(
                 {
@@ -159,7 +156,12 @@
                 loader.hide();
                 var msg = data.Message;
                 if (data.Success) {
-                    msg += " <a href=\"/Account/LogOn\">Log On</a>";
+                    if (SGIsChecked) {
+                        msg += " <a href=\"/SGAccount/LogOn\">Log On</a>";
+                    } else {
+                        msg += " <a href=\"/Account/LogOn\">Log On</a>";
+                    }
+
                     resp.removeClass("error").addClass("success");
                 } else {
                     button.show();
@@ -172,6 +174,7 @@
                 loader.hide();
                 resp.html(data.Message);
                 button.show();
+                SGSpan.show();
             }
         });
     

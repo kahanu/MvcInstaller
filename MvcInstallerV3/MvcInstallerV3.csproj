@@ -34,6 +34,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -49,15 +51,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionFactory.cs" />
     <Compile Include="ConnectionStringComponent.cs" />
     <Compile Include="ConfigurationFactory.cs" />
+    <Compile Include="EntityFrameworkConnectionString.cs" />
     <Compile Include="FileWriter.cs" />
+    <Compile Include="IConnectionProvider.cs" />
     <Compile Include="IConnectionStringComponent.cs" />
     <Compile Include="IConfigurationFactory.cs" />
     <Compile Include="InstallController.cs" />
     <Compile Include="InstallWizard.cs" />
     <Compile Include="IProviderName.cs" />
     <Compile Include="IRulesValidationFactory.cs" />
+    <Compile Include="ISqlConnection.cs" />
     <Compile Include="JsonResponse.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="MinRequiredNonAlphanumericCharacters.cs" />
@@ -69,6 +75,7 @@
     <Compile Include="RequireUniqueEmail.cs" />
     <Compile Include="RulesValidationFactory.cs" />
     <Compile Include="Settings\InstallerConfig.cs" />
+    <Compile Include="SqlConnectionString.cs" />
     <Compile Include="XmlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>

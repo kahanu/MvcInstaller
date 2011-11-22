@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcInstaller.Settings;
 using MvcInstaller;
 using System.Web.Configuration;
+using System.Xml.Linq;
+using System.IO;
 
 namespace MvcInstallerV3.UnitTests
 {
@@ -79,7 +81,59 @@ namespace MvcInstallerV3.UnitTests
             IConfigurationFactory factory = new ConfigurationFactory(component);
             factory.Execute(config, configSection);
 
+            Console.WriteLine("Before save...");
+            var result = configSection.ConnectionStrings.ConnectionStrings[0].ConnectionString;
+            Console.WriteLine(result);
+
             configSection.Save();
+
+            Console.WriteLine("After save...");
+            result = configSection.ConnectionStrings.ConnectionStrings[0].ConnectionString;
+            Console.WriteLine(result);
+
+            string connString = configSection.ConnectionStrings.ConnectionStrings[0].ConnectionString;
+            Console.WriteLine(connString);
+
+        }
+
+        [TestMethod]
+        public void modify_connection_string()
+        {
+            Fix2();
+        }
+
+        private void Fix()
+        {
+            XElement xml = XElement.Load(AppDomain.CurrentDomain.BaseDirectory + @"\MvcInstallerV3.UnitTests.DLL.config");
+
+            if (xml != null)
+            {
+                XElement connStringElement = xml.Element("connectionStrings");
+                XElement addElement = connStringElement.Elements("add").First();
+                string connString = addElement.Attribute("connectionString").Value;
+                connString = connString.Replace("amp;", "");
+                addElement.Attribute("connectionString").Value = connString;
+                xml.Save(AppDomain.CurrentDomain.BaseDirectory + @"\MvcInstallerV3.UnitTests.DLL.config");
+            }
+        }
+
+        private void Fix2()
+        {
+            StringBuilder sb = new StringBuilder();
+            using (StreamReader sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"\MvcInstallerV3.UnitTests.DLL.config"))
+            {
+                String line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    line = line.Replace("amp;", "");
+                    sb.AppendLine(line);
+                }
+            }
+
+            using (StreamWriter sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + @"\MvcInstallerV3.UnitTests.DLL.config"))
+            {
+                sw.Write(sb.ToString());
+            }
         }
     }
 }

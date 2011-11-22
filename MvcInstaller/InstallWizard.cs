@@ -59,12 +59,14 @@ namespace MvcInstaller
                 // Now execute the sql scripts.
                 RunScripts(config);
 
+                // Now create the roles and add users.
+                AddUsers(config);
+
                 // Finally remove the AppInstalled key in the appsettings.
                 RemoveAppInstalledKey();
             }
             catch (Exception)
             {
-                
                 throw;
             }
         }
@@ -80,7 +82,7 @@ namespace MvcInstaller
                 bool blnOk = false;
 
                 // This needs to be created before you execute the installer.
-                // Add this to the appSettings section...
+                // Add this to the appSettings section if it's not already there...
                 //    <appSettings>
                 //       <add key="AppInstalled" value="false" />
                 //    </appSettings>
@@ -148,46 +150,98 @@ namespace MvcInstaller
                 if (config.Database.UseTrustedConnection)
                 {
                     // For SQL Server trusted connections
+                    try
+                    {
+                        System.Web.Management.SqlServices.Uninstall(config.Database.DataSource.Trim(), config.Database.InitialCatalog, System.Web.Management.SqlFeatures.All);
+                    }
+                    catch (SqlException)
+                    {
+                    }
+                    
+                    //DropASPNETDBTables(config);
                     System.Web.Management.SqlServices.Install(config.Database.DataSource.Trim(), config.Database.InitialCatalog, System.Web.Management.SqlFeatures.All);
                 }
                 else
                 {
                     // For SQL Server
+                    try
+                    {
+                        System.Web.Management.SqlServices.Uninstall(config.Database.DataSource.Trim(), config.Database.UserName, config.Database.Password, config.Database.InitialCatalog, System.Web.Management.SqlFeatures.All);
+                    }
+                    catch (SqlException)
+                    {
+                    }
+                    
+                    //DropASPNETDBTables(config);
                     System.Web.Management.SqlServices.Install(config.Database.DataSource.Trim(), config.Database.UserName, config.Database.Password, config.Database.InitialCatalog, System.Web.Management.SqlFeatures.All);
                 }
 
-                // Now create the roles
-                foreach (var role in config.RoleManager.Roles)
-                {
-                    if (!Roles.RoleExists(role.Name))
-                        Roles.CreateRole(role.Name);
 
-                    // Now create user and add to role.
-                    foreach (var user in role.Users)
+            }
+        }
+  
+        /// <summary>
+        /// Add users and roles inside a transaction in case there's an exception, 
+        /// we can simply click the "Install" button again.
+        /// </summary>
+        /// <param name="config"></param>
+        private static void AddUsers(InstallerConfig config)
+        {
+            if (config.Membership.Create)
+            {
+                using (System.Transactions.TransactionScope scope = new System.Transactions.TransactionScope())
+                {
+                    // Now create the roles
+                    foreach (var role in config.RoleManager.Roles)
                     {
-                        MembershipCreateStatus status = MembershipCreateStatus.UserRejected;
-                        MembershipUser u = System.Web.Security.Membership.CreateUser(user.UserName.Trim(), user.Password.Trim(), user.Email.Trim(),
-                            user.SecretQuestion.Trim(), user.SecretAnswer.Trim(), true, out status);
-                        
-                        if (status == MembershipCreateStatus.Success)
+                        if (!Roles.RoleExists(role.Name))
+                            Roles.CreateRole(role.Name);
+                        //throw new Exception("Error adding user - by King.");
+
+                        // Now create user and add to role.
+                        foreach (var user in role.Users)
                         {
-                            // Add user to role
-                            Roles.AddUserToRole(user.UserName, role.Name);
-                        }
-                        else if (status == MembershipCreateStatus.DuplicateUserName)
-                        {
-                            // Add a duplicate username to another role.
-                            // This allows the same user to be added to any number of roles.
-                            Roles.AddUserToRole(user.UserName, role.Name);
-                        }
-                        else if (status == MembershipCreateStatus.InvalidPassword)
-                        {
-                            throw new ApplicationException("Please update the install.config file.  The passwords don't adhere to the rules in the web.config/membership section.");
+                            MembershipCreateStatus status = MembershipCreateStatus.UserRejected;
+                            MembershipUser u = System.Web.Security.Membership.CreateUser(user.UserName.Trim(), user.Password.Trim(), user.Email.Trim(),
+                                user.SecretQuestion.Trim(), user.SecretAnswer.Trim(), true, out status);
+
+                            if (status == MembershipCreateStatus.Success)
+                            {
+                                // Add user to role
+                                Roles.AddUserToRole(user.UserName, role.Name);
+                            }
+                            else if (status == MembershipCreateStatus.DuplicateUserName)
+                            {
+                                // Add a duplicate username to another role.
+                                // This allows the same user to be added to any number of roles.
+                                try
+                                {
+                                    Roles.AddUserToRole(user.UserName, role.Name);
+                                }
+                                catch (Exception)
+                                {
+                                }
+                            }
+                            else if (status == MembershipCreateStatus.InvalidPassword)
+                            {
+                                throw new ApplicationException("Please update the install.config file.  The passwords don't adhere to the rules in the web.config/membership section.");
+                            }
                         }
                     }
+                    scope.Complete();
                 }
             }
         }
+
+        //private static void DropASPNETDBTables(InstallerConfig config)
+        //{
+        //    string[] files = Directory.GetFiles(config.Path.AppPath + @"MvcInstaller\Scripts");
+        //    foreach (string file in files)
+        //    {
+        //        string[] statements = GetScriptStatements(File.ReadAllText(file, new System.Text.UTF8Encoding()), StringSplitOptions.None);
+        //        ExecuteStatements(statements, config);
+        //    }
+        //}
 
         /// <summary>
         /// Run the sql scripts in the location set in the installer.config file.
@@ -202,6 +256,8 @@ namespace MvcInstaller
                 ExecuteStatements(statements, config);
             }
         }
+
+        
 
         /// <summary>
         /// This will execute the sql statements.
@@ -237,7 +293,12 @@ namespace MvcInstaller
         /// <returns></returns>
         private static string[] GetScriptStatements(string p)
         {
-            string[] statements = p.Split(new string[] { "GO\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            return GetScriptStatements(p, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private static string[] GetScriptStatements(string p, StringSplitOptions options)
+        {
+            string[] statements = p.Split(new string[] { "GO\r\n" }, options);
             return statements;
         }
 
@@ -263,8 +324,32 @@ namespace MvcInstaller
             //ConnectionStringSettings LocalSqlServer = new ConnectionStringSettings("LocalSqlServer", component.GetConnString(), "System.Data.SqlClient");
             //ConnectionStringsSection connSection = configSection.ConnectionStrings;
             //connSection.ConnectionStrings.Add(LocalSqlServer);
-
+            
             configSection.Save();
+
+            Fix();
+        }
+
+        /// <summary>
+        /// Fix an anomaly in the WebConfigurationManager Save method that encodes "&quot;" to &amp;quot;".
+        /// </summary>
+        private static void Fix()
+        {
+            StringBuilder sb = new StringBuilder();
+            using (StreamReader sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"\web.config"))
+            {
+                String line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    line = line.Replace("amp;", "");
+                    sb.AppendLine(line);
+                }
+            }
+
+            using (StreamWriter sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + @"\web.config"))
+            {
+                sw.Write(sb.ToString());
+            }
         }
 
         /// <summary>
@@ -283,19 +368,7 @@ namespace MvcInstaller
             configSection.Save();
         }
 
-        /// <summary>
-        /// In case of an exception after creating and partially populating the Membership database,
-        /// we can rollback the action.  But first we need to delete all rows from all tables.
-        /// </summary>
-        /// <param name="config"></param>
-        private static void Rollback(InstallerConfig config)
-        {
-            // aspnet_Applications, Membership, Roles, SchemaVersions, Users, UsersInRoles
 
-            //TODO
-
-            System.Web.Management.SqlServices.Uninstall(config.Database.DataSource.Trim(), config.Database.UserName.Trim(), config.Database.Password.Trim(), config.Database.InitialCatalog.Trim(), System.Web.Management.SqlFeatures.All);
-        }
         #endregion
     }
 }

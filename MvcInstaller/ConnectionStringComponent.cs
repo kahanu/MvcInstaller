@@ -49,7 +49,7 @@ namespace MvcInstaller
         public string BuildEntityFrameworkConnectionString()
         {
             string standardConn = GetConnString();
-            string connString = string.Format("metadata=res://*/EntityFramework.{0}.csdl|res://*/EntityFramework.{0}.ssdl|res://*/EntityFramework.{0}.msl;provider=System.Data.SqlClient;provider connection string=&quot;{1}MultipleActiveResultSets=True&quot;", config.Database.EntityFrameworkEntitiesName, standardConn);
+            string connString = string.Format("metadata=res://*/EntityFramework.{0}.csdl|res://*/EntityFramework.{0}.ssdl|res://*/EntityFramework.{0}.msl;provider=System.Data.SqlClient;provider connection string=&quot;{1}MultipleActiveResultSets=True;App=EntityFramework&quot;", config.Database.EntityFrameworkEntitiesName, standardConn);
 
             return connString;
         }

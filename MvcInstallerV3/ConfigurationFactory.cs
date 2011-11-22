@@ -46,25 +46,40 @@ namespace MvcInstaller
         /// <param name="configSection"></param>
         private void UpdateConnectionString(InstallerConfig config, Configuration configSection)
         {
-            string connString = component.GetConnString();
-            //string providerName = "System.Data.SqlClient";
-            string providerName = component.GetProviderName;
+            ConnectionStringsSection connectionStringsSection = configSection.ConnectionStrings;
+
+            string connString = string.Empty;
+            string providerName = string.Empty;
 
             if (!string.IsNullOrEmpty(config.Database.EntityFrameworkEntitiesName))
             {
-                //providerName = "System.Data.EntityClient";
-                connString = component.BuildEntityFrameworkConnectionString();
+                // EntityFramework connection string
+                providerName = component.GetProviderName;
+                connString = component.GetConnString();
+
+                string efname = config.Database.EntityFrameworkEntitiesName;
+
+                ConnectionStringSettings appTemplate = new ConnectionStringSettings(config.Database.ConnectionStringName, connString, providerName);
+                connectionStringsSection.ConnectionStrings.Clear();
+                connectionStringsSection.ConnectionStrings.Add(appTemplate);
+
+                if (!string.IsNullOrEmpty(config.Database.EntityFrameworkEntitiesName) && config.Membership.Create)
+                {
+                    config.Database.EntityFrameworkEntitiesName = "";
+                    ConnectionStringSettings connTemplate = new ConnectionStringSettings("MembershipConnection", component.GetConnString(), "System.Data.SqlClient");
+                    connectionStringsSection.ConnectionStrings.Add(connTemplate);
+                    config.Database.EntityFrameworkEntitiesName = efname;
+                }
             }
-
-            ConnectionStringsSection connectionStringsSection = configSection.ConnectionStrings;
-            ConnectionStringSettings appTemplate = new ConnectionStringSettings(config.Database.ConnectionStringName, connString, providerName);
-            connectionStringsSection.ConnectionStrings.Clear();
-            connectionStringsSection.ConnectionStrings.Add(appTemplate);
-
-            if (!string.IsNullOrEmpty(config.Database.EntityFrameworkEntitiesName) && config.Membership.Create)
+            else
             {
-                ConnectionStringSettings connTemplate = new ConnectionStringSettings("MembershipConnection", component.GetConnString(), "System.Data.SqlClient");
-                connectionStringsSection.ConnectionStrings.Add(connTemplate);
+                // Standard SqlServer Connection string
+                providerName = component.GetProviderName;
+                connString = component.GetConnString();
+
+                ConnectionStringSettings appTemplate = new ConnectionStringSettings(config.Database.ConnectionStringName, connString, providerName);
+                connectionStringsSection.ConnectionStrings.Clear();
+                connectionStringsSection.ConnectionStrings.Add(appTemplate);
             }
         }
 

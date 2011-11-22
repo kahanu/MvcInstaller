@@ -137,14 +137,50 @@ namespace MvcInstaller.Settings
         [XmlAttribute()]
         public string EntityFrameworkEntitiesName;
 
-        [XmlAttribute()]
-        public bool UseSqlCe40;
+        /// <summary>
+        /// This is deprecated. 
+        /// </summary>
+        //[XmlAttribute()]
+        //public bool UseSqlCe40;
 
         public string ConnectionStringName;
         public string DataSource;
         public string InitialCatalog;
         public string UserName;
         public string Password;
+
+        /* 
+         * New By King Wilder 
+         * November 21, 2011
+         * */
+
+        /// <summary>
+        /// Options are:
+        ///   -- AttachedSql      (.\sqlexpress)
+        ///   -- AttachedSqlCe35  (*.sdf)
+        ///   -- AttachedSqlCe40  (*.sdf)
+        ///   -- RemoteSqlServer  (instance)
+        /// </summary>
+        //[XmlAttribute()]
+        //public string ProviderType;
+
+        /// <summary>
+        /// Options are:
+        ///    -- System.Data.SqlClient
+        ///    -- System.Data.EntityClient
+        ///    -- System.Data.SqlServerCe.4.0
+        /// </summary>
+        //[XmlAttribute()]
+        //public string ProviderName;
+
+        // OleDbConnectionStringBuilder fields
+        //public string Provider;
+        //public string OleDbServices;
+        //public string PersistSecurityInfo;
+
+        //// OdbcConnectionStringBuilder fields
+        //public string Driver;
+        //public string Dsn;
     }
 
     [Serializable]

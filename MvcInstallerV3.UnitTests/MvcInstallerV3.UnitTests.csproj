@@ -35,10 +35,15 @@
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Extensions" />
@@ -53,7 +58,12 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionStringProviderTests\ConnectionFactoryTests.cs" />
+    <Compile Include="ConnectionStringProviderTests\ConnectionStringProviderTests.cs" />
+    <Compile Include="IConnectionStringComponentTests\ConnectionStringComponentTest.cs" />
+    <Compile Include="IConnectionStringComponentTests\FakeConnectionStringComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlTests.cs" />
     <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +73,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Database1.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\scripts\1 - Tables.sql" />
+    <Content Include="App_Data\scripts\2 - Data.sql" />
+    <Content Include="App_Data\scripts\3 - Sprocs.sql" />
+    <Content Include="bin\Debug\App_Data\Database1.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bin\Debug\MvcInstaller.MVC3.dll" />
+    <Content Include="bin\Debug\MvcInstaller.MVC3.pdb" />
+    <Content Include="bin\Debug\MvcInstallerV3.UnitTests.dll" />
+    <Content Include="bin\Debug\MvcInstallerV3.UnitTests.pdb" />
     <Content Include="installer.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -72,6 +95,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="appsettings.config" />
+    <None Include="bin\Debug\App.Config" />
+    <None Include="bin\Debug\installer.config" />
+    <None Include="bin\Debug\MvcInstallerV3.UnitTests.DLL.config" />
+    <None Include="bin\Debug\web.config" />
+    <None Include="bin\Debug\Web.Debug.config" />
+    <None Include="bin\Debug\Web.Release.config" />
     <None Include="sql.config" />
     <Content Include="web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -86,6 +115,10 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

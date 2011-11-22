@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>MvcInstaller.MVC2</id>
-    <version>1.0.138.34</version>
+    <version>1.0.140.40</version>
     <authors>Gizmo Beach</authors>
     <owners>Gizmo Beach</owners>
     <licenseUrl>http://mvcinstaller.codeplex.com/license</licenseUrl>

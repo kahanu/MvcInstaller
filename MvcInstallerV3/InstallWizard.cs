@@ -196,7 +196,6 @@ namespace MvcInstaller
                     {
                         if (!Roles.RoleExists(role.Name))
                             Roles.CreateRole(role.Name);
-                        //throw new Exception("Error adding user - by King.");
 
                         // Now create user and add to role.
                         foreach (var user in role.Users)
@@ -270,6 +269,8 @@ namespace MvcInstaller
             {
                 using (SqlConnection conn = new SqlConnection())
                 {
+                    // Make sure we're not returning the EntityFramework connection string.
+                    config.Database.EntityFrameworkEntitiesName = "";
                     IConnectionStringComponent component = new ConnectionStringComponent(config);
                     conn.ConnectionString = component.GetConnString();
                     conn.Open();
@@ -327,7 +328,7 @@ namespace MvcInstaller
             
             configSection.Save();
             
-            Fix();
+            //Fix();
         }
 
         /// <summary>

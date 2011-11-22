@@ -137,6 +137,12 @@ namespace MvcInstaller.Settings
         [XmlAttribute()]
         public string EntityFrameworkEntitiesName;
 
+        /// <summary>
+        /// This is deprecated. 
+        /// </summary>
+        //[XmlAttribute()]
+        //public bool UseSqlCe40;
+
         public string ConnectionStringName;
         public string DataSource;
         public string InitialCatalog;
