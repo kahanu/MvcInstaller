@@ -59,7 +59,7 @@ namespace MvcInstaller
 
                 string efname = config.Database.EntityFrameworkEntitiesName;
 
-                ConnectionStringSettings appTemplate = new ConnectionStringSettings(config.Database.ConnectionStringName, connString, providerName);
+                ConnectionStringSettings appTemplate = new ConnectionStringSettings(config.Database.EntityFrameworkEntitiesName, connString, providerName);
                 connectionStringsSection.ConnectionStrings.Clear();
                 connectionStringsSection.ConnectionStrings.Add(appTemplate);
 
