@@ -93,8 +93,11 @@ There are times when it doesn't install.  Here are some things to look for.
 2) Write Permissions - for the installer to work, you must have Write Permissions set on the server.  After installation you can disable write permissions.
 3) ConnectionString names - make sure your membership sections in the web.config file has the correct connectionStringName.
 
+If you like the project, I always accept [Donations](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CPTJFSQBBFSWN).
 
 Thanks,
 
 King Wilder
+
+
    	
