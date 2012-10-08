@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace MvcInstaller
@@ -8,7 +9,13 @@ namespace MvcInstaller
         public static void Exception(Exception ex)
         {
             string _fileName;
-            _fileName = AppDomain.CurrentDomain.BaseDirectory + @"\MvcInstaller\Logs\Errors-" + string.Format("{0:yyyy-MM-dd}", DateTime.Now) + ".log";
+            string logsDir = AppDomain.CurrentDomain.BaseDirectory + @"\MvcInstaller\Logs";
+
+            DirectoryInfo di = new DirectoryInfo(logsDir);
+            if (!di.Exists)
+                di.Create();
+
+            _fileName = logsDir + @"\Errors-" + string.Format("{0:yyyy-MM-dd}", DateTime.Now) + ".log";
             string msg = "[" + DateTime.Now.ToString() + "] Source: " + ex.Source + " - Message: " + ex.Message;
                 if (ex != null)
                 {

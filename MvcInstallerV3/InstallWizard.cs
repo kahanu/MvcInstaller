@@ -152,6 +152,7 @@ namespace MvcInstaller
                     // For SQL Server trusted connections
                     try
                     {
+                        ResetDb(config);
                         System.Web.Management.SqlServices.Uninstall(config.Database.DataSource.Trim(), config.Database.InitialCatalog, System.Web.Management.SqlFeatures.All);
                     }
                     catch (SqlException)
@@ -166,6 +167,7 @@ namespace MvcInstaller
                     // For SQL Server
                     try
                     {
+                        ResetDb(config);
                         System.Web.Management.SqlServices.Uninstall(config.Database.DataSource.Trim(), config.Database.UserName, config.Database.Password, config.Database.InitialCatalog, System.Web.Management.SqlFeatures.All);
                     }
                     catch (SqlException)
@@ -189,25 +191,47 @@ namespace MvcInstaller
         {
             if (config.Membership.Create)
             {
-                using (System.Transactions.TransactionScope scope = new System.Transactions.TransactionScope())
-                {
+                //using (System.Transactions.TransactionScope scope = new System.Transactions.TransactionScope())
+                //{
                     // Now create the roles
                     foreach (var role in config.RoleManager.Roles)
                     {
-                        if (!Roles.RoleExists(role.Name))
-                            Roles.CreateRole(role.Name);
+                        try
+                        {
+                            if (!Roles.RoleExists(role.Name))
+                                Roles.CreateRole(role.Name);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("Error creating Role: " + ex.Message);
+                        }
 
                         // Now create user and add to role.
                         foreach (var user in role.Users)
                         {
                             MembershipCreateStatus status = MembershipCreateStatus.UserRejected;
-                            MembershipUser u = System.Web.Security.Membership.CreateUser(user.UserName.Trim(), user.Password.Trim(), user.Email.Trim(),
-                                user.SecretQuestion.Trim(), user.SecretAnswer.Trim(), true, out status);
+
+                            try
+                            {
+                                MembershipUser u = System.Web.Security.Membership.CreateUser(user.UserName.Trim(), user.Password.Trim(), user.Email.Trim(),
+                                    user.SecretQuestion.Trim(), user.SecretAnswer.Trim(), true, out status);
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception("Error creating User: " + ex.Message);
+                            }
 
                             if (status == MembershipCreateStatus.Success)
                             {
-                                // Add user to role
-                                Roles.AddUserToRole(user.UserName, role.Name);
+                                try
+                                {
+                                    // Add user to role
+                                    Roles.AddUserToRole(user.UserName, role.Name);
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw new Exception("Error adding user to role: " + ex.Message);
+                                }
                             }
                             else if (status == MembershipCreateStatus.DuplicateUserName)
                             {
@@ -217,7 +241,7 @@ namespace MvcInstaller
                                 {
                                     Roles.AddUserToRole(user.UserName, role.Name);
                                 }
-                                catch (Exception)
+                                catch (Exception ex)
                                 {
                                 }
                             }
@@ -227,8 +251,8 @@ namespace MvcInstaller
                             }
                         }
                     }
-                    scope.Complete();
-                }
+                //    scope.Complete();
+                //}
             }
         }
 
@@ -242,13 +266,31 @@ namespace MvcInstaller
         //    }
         //}
 
+
+
+        /// <summary>
+        /// This is used before the System.Web.Management.SqlServices.Uninstall class to remove
+        /// any constraints that you may have put on your table and the aspnet Db tables.
+        /// You create the scripts and drop them into the App_Data\Reset folder.
+        /// </summary>
+        /// <param name="config"></param>
+        private static void ResetDb(InstallerConfig config)
+        {
+            string[] files = Directory.GetFiles(config.Path.AppPath + config.Path.RelativeSqlPath + @"\Reset", "*.sql");
+            foreach (string file in files)
+            {
+                string[] statements = GetScriptStatements(File.ReadAllText(file, new System.Text.UTF8Encoding()));
+                ExecuteStatements(statements, config);
+            }
+        }
+
         /// <summary>
         /// Run the sql scripts in the location set in the installer.config file.
         /// </summary>
         /// <param name="config"></param>
         private static void RunScripts(InstallerConfig config)
         {
-            string[] files = Directory.GetFiles(config.Path.AppPath + config.Path.RelativeSqlPath);
+            string[] files = Directory.GetFiles(config.Path.AppPath + config.Path.RelativeSqlPath, "*.sql");
             foreach (string file in files)
             {
                 string[] statements = GetScriptStatements(File.ReadAllText(file, new System.Text.UTF8Encoding()));

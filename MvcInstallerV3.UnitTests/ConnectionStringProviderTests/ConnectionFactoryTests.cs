@@ -59,13 +59,14 @@ namespace MvcInstallerV3.UnitTests.ConnectionStringProviderTests
             config.Database.DataSource = @"kingwilder-pc\sqlserver";
             config.Database.InitialCatalog = "BloggerApp";
             config.Database.UseTrustedConnection = true;
-            config.Database.EntityFrameworkEntitiesName = "BloggerEntities";
+            config.Database.EntityFrameworkEntitiesName = "EntityFramework.BloggerEntities";
 
             ConnectionFactory factory = new ConnectionFactory(config);
 
             // Act
             var actual = factory.ConnectionString();
-            var expected = @"metadata=res://*/Models.BloggerEntities.csdl|res://*/Models.BloggerEntities.ssdl|res://*/Models.BloggerEntities.msl;provider=System.Data.SqlClient;provider connection string=""Data Source=kingwilder-pc\sqlserver;Initial Catalog=BloggerApp;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework""";
+            //var expected = @"metadata=res://*/Models.BloggerEntities.csdl|res://*/Models.BloggerEntities.ssdl|res://*/Models.BloggerEntities.msl;provider=System.Data.SqlClient;provider connection string=""Data Source=kingwilder-pc\sqlserver;Initial Catalog=BloggerApp;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework""";
+            var expected = @"metadata=res://*/EntityFramework.BloggerEntities.csdl|res://*/EntityFramework.BloggerEntities.ssdl|res://*/EntityFramework.BloggerEntities.msl;provider=System.Data.SqlClient;provider connection string=""Data Source=kingwilder-pc\sqlserver;Initial Catalog=BloggerApp;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework""";
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -79,7 +80,7 @@ namespace MvcInstallerV3.UnitTests.ConnectionStringProviderTests
             config.Database.DataSource = @"kingwilder-pc\sqlserver";
             config.Database.InitialCatalog = "BloggerApp";
             config.Database.UseTrustedConnection = false;
-            config.Database.EntityFrameworkEntitiesName = "BloggerEntities";
+            config.Database.EntityFrameworkEntitiesName = "EntityFramework.BloggerEntities";
             config.Database.UserName = "dbadminuser";
             config.Database.Password = "dbadminpassword";
 
@@ -87,7 +88,7 @@ namespace MvcInstallerV3.UnitTests.ConnectionStringProviderTests
 
             // Act
             var actual = factory.ConnectionString();
-            var expected = @"metadata=res://*/Models.BloggerEntities.csdl|res://*/Models.BloggerEntities.ssdl|res://*/Models.BloggerEntities.msl;provider=System.Data.SqlClient;provider connection string=""Data Source=kingwilder-pc\sqlserver;Initial Catalog=BloggerApp;User ID=dbadminuser;Password=dbadminpassword;MultipleActiveResultSets=True;Application Name=EntityFramework""";
+            var expected = @"metadata=res://*/EntityFramework.BloggerEntities.csdl|res://*/EntityFramework.BloggerEntities.ssdl|res://*/EntityFramework.BloggerEntities.msl;provider=System.Data.SqlClient;provider connection string=""Data Source=kingwilder-pc\sqlserver;Initial Catalog=BloggerApp;User ID=dbadminuser;Password=dbadminpassword;MultipleActiveResultSets=True;Application Name=EntityFramework""";
 
             // Assert
             Assert.AreEqual(expected, actual);
