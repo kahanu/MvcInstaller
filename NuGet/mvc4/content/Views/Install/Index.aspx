@@ -15,7 +15,13 @@
 .fieldwrapper { margin-bottom: 0.5em; clear: both; }
 .fieldwrapperindented { margin-bottom: 0.5em; clear: both; margin-left: 20px; }
 .error { color: Red; }
-
+        #update
+        {
+            width: 90%;
+            background-color: #ccc;
+            padding: 10px;
+            margin: 0 auto;
+        }
 </style>
 </head>
 
@@ -44,6 +50,10 @@
 
     <h2>
         MVC Site Installer</h2>
+                    <div id="update">
+	                <p><b>Update!</b> - this version of MvcInstaller works with the .Net 4.0 framework in VS 2010 projects and in VS 2012 projects using the .Net 4.5 framework.  <b>BUT</b>, and here's the big but, both implementations use the new Membership system based on the System.Web.Providers namespace!</p>
+	                <p>If you want to use the .Net 4.5 SimpleMembershipProviders, I have not yet created a workable version for this new system.  Stay tuned!</p>
+            </div>
     <p>For more information on this installer, please visit <a href="http://www.mvccentral.net/s/44" target="_blank">http://www.mvccentral.net/s/44</a>.</p>
     <p>The data below is the information from your installer.config file that will be used to install your application.</p>
     <p style="color:Red;"><b>Important!</b> Make sure this path on the server has <b>write permissions</b>, at least for the installation process.  You can disable it afterward.</p>

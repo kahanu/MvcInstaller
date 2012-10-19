@@ -10,13 +10,13 @@ body
     font-family: Verdana, Tahoma, Arial, "Helvetica Neue" , Helvetica, Sans-Serif;
     margin: 0;
     padding: 0;
-    color: #696969;
-    background-color: #CC9900;
+    color: #333;
+    background-color: #e2e2e2;
 }
 
 a:link
 {
-    color: #034af3;
+    color: #333;
     text-decoration: underline;
 }
 a:visited
@@ -102,7 +102,7 @@ page width. Or, you can specify an exact pixel width. */
     font-weight: bold;
     padding: 5px 0;
     margin: 0;
-    color: #fff;
+    color: #999;
     border: none;
     line-height: 2em;
     font-size: 32px !important;
