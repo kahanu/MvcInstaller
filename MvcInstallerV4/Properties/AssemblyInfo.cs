@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MvcInstaller.MVC4")]
-[assembly: AssemblyDescription("ASP.NET MVC 4 Installer - the easy way to install your database-driven MVC application on your production server.")]
+[assembly: AssemblyDescription("ASP.NET MVC 4 Installer - the easy way to install your database-driven MVC application on your production server.  This version contains code for VS 2012 usage.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Gizmo Beach")]
 [assembly: AssemblyProduct("MvcInstaller - for ASP.NET MVC 4")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]

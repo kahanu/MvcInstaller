@@ -38,10 +38,14 @@ namespace MvcInstaller
                 return RedirectToAction("Index", "Home");
             }
 
+            
             path = Server.MapPath("~/");
 
             // Deserialize the installer.config xml file.
             InstallerConfig config = Serializer<InstallerConfig>.Deserialize(path + @"installer.config");
+
+            // Update the web.config prior to running the procedure. 
+            InstallWizard.UpdateConfig(config);
 
             return View(config);
         }

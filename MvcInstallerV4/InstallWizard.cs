@@ -39,6 +39,20 @@ namespace MvcInstaller
 
         }
 
+        //private static bool _is2012;
+
+        //public static bool Is2012
+        //{
+        //    get
+        //    {
+        //        return _is2012;
+        //    }
+        //    set
+        //    {
+        //        _is2012 = value;
+        //    }
+        //}
+
         /// <summary>
         /// Run the process to install the database and users.
         /// </summary>
@@ -50,8 +64,8 @@ namespace MvcInstaller
 
             try
             {
-                // Update the web.config/connectionStrings section.
-                UpdateWebConfig(config);
+                //// Update the web.config/connectionStrings section.
+                //UpdateWebConfig(config);
 
                 // Create membership roles and users.
                 CreateMembership(config);
@@ -102,6 +116,14 @@ namespace MvcInstaller
                 return blnOk;
             }
         }
+
+
+        public static void UpdateConfig(InstallerConfig config)
+        {
+            // Update the web.config/connectionStrings section.
+            UpdateWebConfig(config);
+        }
+
 
         #region Private Methods
 
@@ -211,7 +233,7 @@ namespace MvcInstaller
 
                         try
                         {
-                            MembershipUser u = System.Web.Security.Membership.CreateUser(user.UserName.Trim(), user.Password.Trim(), user.Email.Trim(),
+                            System.Web.Security.Membership.CreateUser(user.UserName.Trim(), user.Password.Trim(), user.Email.Trim(),
                                 user.SecretQuestion.Trim(), user.SecretAnswer.Trim(), true, out status);
                         }
                         catch (Exception ex)
@@ -250,6 +272,16 @@ namespace MvcInstaller
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Check that the correct providers are referenced for the Membership system.  This version
+        /// of MvcInstaller does NOT use the new SimpleMembershipProviders.  It still uses the
+        /// System.Web.Providers namespace.
+        /// </summary>
+        private static void ProviderCheck()
+        {
+
         }
 
         //private static void DropASPNETDBTables(InstallerConfig config)
@@ -365,7 +397,6 @@ namespace MvcInstaller
             //connSection.ConnectionStrings.Add(LocalSqlServer);
 
             configSection.Save();
-
             //Fix();
         }
 
