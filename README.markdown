@@ -3,6 +3,12 @@ by King Wilder
 https://github.com/kahanu/MvcInstaller
 Created on: 11/21/2010
 
+*************************
+Update on October 20, 2012
+
+MvcInstaller.Mvc4 has been created for the .Net 4.0 and .Net 4.5 Frameworks for both VS 2010 and VS 2012 projects.  This version uses the System.Web.Providers namespace for both IDE's.
+*************************
+
 
 Updated on November 14, 2011
 
