@@ -2,11 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>MvcInstaller.MVC4</id>
-    <version>1.1.0.0</version>
+    <version>1.1.1.0</version>
     <authors>Gizmo Beach</authors>
     <owners>Gizmo Beach</owners>
     <licenseUrl>http://mvcinstaller.codeplex.com/license</licenseUrl>
-    <projectUrl>https://github.com/kahanu/MvcInstaller</projectUrl>
+    <projectUrl>http://www.mvccentral.net/s/69</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ASP.NET MVC 4 Installer - install your database schema and the ASP.NET Membership system on your server via a browser.  This version handles the new System.Web.Providers Membership namespace and uses these providers for VS 2012 projects.</description>
     <tags>mvc4 installer</tags>

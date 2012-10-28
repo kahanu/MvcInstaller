@@ -167,9 +167,9 @@
                 var msg = data.Message;
                 if (data.Success) {
                     if (SGIsChecked) {
-                        msg += " <a href=\"/SGAccount/LogOn\">Log On</a>";
+                        msg += " <a href=\"/SGAccount/Login\">Login</a>";
                     } else {
-                        msg += " <a href=\"/Account/LogOn\">Log On</a>";
+                        msg += " <a href=\"/Account/Login\">Login</a>";
                     }
 
                     resp.removeClass("error").addClass("success");
