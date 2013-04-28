@@ -46,7 +46,7 @@
         MVC Site Installer</h2>
     <p>For more information on this installer, please visit <a href="http://www.mvccentral.net/s/44" target="_blank">http://www.mvccentral.net/s/44</a>.</p>
     <p>The data below is the information from your installer.config file that will be used to install your application.</p>
-    <p style="color:Red;"><b>Important!</b> Make sure this path on the server has <b>write permissions</b>, at least for the installation process.  You can disable it afterward.</p>
+    <p style="color:Red;"><b>Important!</b> Your web.config will be updated with the installer.config settings! Make sure this path on the server has <b>write permissions</b>, at least for the installation process.  You can disable it afterward.</p>
     <fieldset>
         <legend>Application</legend>
         <div class="fieldwrapper">
